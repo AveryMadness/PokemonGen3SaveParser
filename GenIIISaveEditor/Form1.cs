@@ -1,3 +1,4 @@
+
 namespace GenIIISaveEditor
 {
     public partial class Form1 : Form
@@ -19,6 +20,43 @@ namespace GenIIISaveEditor
         //HACK - Store all pokemon externally
         List<PKMFile> Pokemons = new List<PKMFile>();
 
+        //section data
+        public static long SECTION_DATA = 0x00;
+        public static long SECTION_SECTIONID = 0x0FF4;
+        public static long SECTION_CHECKSUM = 0x0FF6;
+        public static long SECTION_SIGNATURE = 0x0FF8;
+        public static long SECTION_SAVEINDEX = 0x0FFC;
+        //trainer info
+        public static long TRAINERINFO_PLAYERNAME = 0x0000;
+        public static long TRAINERINFO_PLAYERGENDER = 0x0008;
+        public static long TRAINERINFO_TRAINERID = 0x000A;
+        public static long TRAINERINFO_TIMEPLAYED = 0x000E;
+        public static long TRAINERINFO_OPTIONS = 0x0013;
+        public static long TRAINERINFO_SECURITYKEY = 0x0F20;
+
+        //team and items
+        public static long TEAMANDITEMS_TEAMSIZE = 0x0034;
+
+        //team pokemon offsets
+        public static long TEAMPKMN_1 = 0x0038;
+        public static long TEAMPKMN_2 = 0x9C;
+        public static long TEAMPKMN_3 = 0x100;
+        public static long TEAMPKMN_4 = 0x164;
+        public static long TEAMPKMN_5 = 0x1C8;
+        public static long TEAMPKMN_6 = 0x22C;
+
+        public static long TEAMANDITEMS_MONEY = 0x0290;
+
+        //pokemon data
+        public static long POKEMON_PERSONALITYVALUE = 0x00;
+        public static long POKEMON_OTID = 0x4;
+        public static long POKEMON_NICKNAME = 0x8;
+        public static long POKEMON_OTNAME = 0x14;
+        public static long POKEMON_DATA = 0x20;
+        public static long POKEMON_STATUSCONDITION = 0x50;
+        public static long POKEMON_LEVEL = 0x54;
+        public static long POKEMON_CURRENTHP = 0x56;
+        public static long POKEMON_TOTALHP = 0x58;
 
         public Form1()
         {
@@ -115,16 +153,17 @@ namespace GenIIISaveEditor
             using (MemoryStream memoryStream = new MemoryStream(trainerSection.Data.Data))
             using (BinaryReader binaryReader = new BinaryReader(memoryStream))
             {
+                
                 memoryStream.Read(TrainerInfo.playerName, 0, 7);
-                memoryStream.Seek(0x0008, SeekOrigin.Begin);
+                memoryStream.Seek(TRAINERINFO_PLAYERGENDER, SeekOrigin.Begin);
                 memoryStream.Read(TrainerInfo.playerGender, 0, 1);
-                memoryStream.Seek(0x000A, SeekOrigin.Begin);
+                memoryStream.Seek(TRAINERINFO_TRAINERID, SeekOrigin.Begin);
                 memoryStream.Read(TrainerInfo.TrainerID, 0, 4);
-                memoryStream.Seek(0x000E, SeekOrigin.Begin);
+                memoryStream.Seek(TRAINERINFO_TIMEPLAYED, SeekOrigin.Begin);
                 memoryStream.Read(TrainerInfo.TimePlayed, 0, 5);
-                memoryStream.Seek(0x0013, SeekOrigin.Begin);
+                memoryStream.Seek(TRAINERINFO_OPTIONS, SeekOrigin.Begin);
                 memoryStream.Read(TrainerInfo.Options, 0, 3);
-                memoryStream.Seek(0x0F20, SeekOrigin.Begin);
+                memoryStream.Seek(TRAINERINFO_SECURITYKEY, SeekOrigin.Begin);
                 memoryStream.Read(TrainerInfo.SecurityKey, 0, 4);
             }
 
@@ -133,41 +172,41 @@ namespace GenIIISaveEditor
             using (MemoryStream memoryStream = new MemoryStream(itemsSection.Data.Data))
             using (BinaryReader binaryReader = new BinaryReader(memoryStream))
             {
-                memoryStream.Seek(0x0034, SeekOrigin.Begin);
+                memoryStream.Seek(TEAMANDITEMS_TEAMSIZE, SeekOrigin.Begin);
                 memoryStream.Read(teamAndItems.TeamSize, 0, 4);
+
                 
-                memoryStream.Seek(0x0038, SeekOrigin.Begin);
-                
+                memoryStream.Seek(TEAMPKMN_1, SeekOrigin.Begin);
                 RawPKMData newData = new RawPKMData();
                 memoryStream.Read(newData.Data, 0, 100);
                 pokemonData[0] = newData;
 
                 newData = new RawPKMData();
-                memoryStream.Seek(0x9C, SeekOrigin.Begin);
+                memoryStream.Seek(TEAMPKMN_2, SeekOrigin.Begin);
                 memoryStream.Read(newData.Data, 0, 100);
                 pokemonData[1] = newData;
 
                 newData = new RawPKMData();
-                memoryStream.Seek(0x100, SeekOrigin.Begin);
+                memoryStream.Seek(TEAMPKMN_3, SeekOrigin.Begin);
                 memoryStream.Read(newData.Data, 0, 100);
                 pokemonData[2] = newData;
 
                 newData = new RawPKMData();
-                memoryStream.Seek(0x164, SeekOrigin.Begin);
+                memoryStream.Seek(TEAMPKMN_4, SeekOrigin.Begin);
                 memoryStream.Read(newData.Data, 0, 100);
                 pokemonData[3] = newData;
 
                 newData = new RawPKMData();
-                memoryStream.Seek(0x1C8, SeekOrigin.Begin);
+                memoryStream.Seek(TEAMPKMN_5, SeekOrigin.Begin);
                 memoryStream.Read(newData.Data, 0, 100);
                 pokemonData[4] = newData;
 
                 newData = new RawPKMData();
-                memoryStream.Seek(0x22C, SeekOrigin.Begin);
+                memoryStream.Seek(TEAMPKMN_6, SeekOrigin.Begin);
                 memoryStream.Read(newData.Data, 0, 100);
                 pokemonData[5] = newData;
 
-                memoryStream.Seek(0x0290, SeekOrigin.Begin);
+                memoryStream.Seek(TEAMANDITEMS_MONEY, SeekOrigin.Begin);
                 memoryStream.Read(teamAndItems.Money, 0, 4);
             }
 
@@ -180,21 +219,21 @@ namespace GenIIISaveEditor
                     PKMFile Pokemon = new PKMFile();
 
                     memoryStream.Read(Pokemon.PersonalityValue, 0, 4);
-                    memoryStream.Seek(0x4, SeekOrigin.Begin);
+                    memoryStream.Seek(POKEMON_OTID, SeekOrigin.Begin);
                     memoryStream.Read(Pokemon.OTID, 0, 4);
-                    memoryStream.Seek(0x8, SeekOrigin.Begin);
+                    memoryStream.Seek(POKEMON_NICKNAME, SeekOrigin.Begin);
                     memoryStream.Read(Pokemon.Nickname, 0, 10);
-                    memoryStream.Seek(0x14, SeekOrigin.Begin);
+                    memoryStream.Seek(POKEMON_OTNAME, SeekOrigin.Begin);
                     memoryStream.Read(Pokemon.OTName, 0, 7);
-                    memoryStream.Seek(0x20, SeekOrigin.Begin);
+                    memoryStream.Seek(POKEMON_DATA, SeekOrigin.Begin);
                     memoryStream.Read(Pokemon.Data, 0, 48);
-                    memoryStream.Seek(0x50, SeekOrigin.Begin);
+                    memoryStream.Seek(POKEMON_STATUSCONDITION, SeekOrigin.Begin);
                     memoryStream.Read(Pokemon.StatusCondition, 0, 4);
-                    memoryStream.Seek(0x54, SeekOrigin.Begin);
+                    memoryStream.Seek(POKEMON_LEVEL, SeekOrigin.Begin);
                     memoryStream.Read(Pokemon.Level, 0, 1);
-                    memoryStream.Seek(0x56, SeekOrigin.Begin);
+                    memoryStream.Seek(POKEMON_CURRENTHP, SeekOrigin.Begin);
                     memoryStream.Read(Pokemon.CurrentHP, 0, 2);
-                    memoryStream.Seek(0x58, SeekOrigin.Begin);
+                    memoryStream.Seek(POKEMON_TOTALHP, SeekOrigin.Begin);
                     memoryStream.Read(Pokemon.TotalHP, 0, 2);
 
                     Pokemons.Add(Pokemon);
@@ -314,19 +353,19 @@ namespace GenIIISaveEditor
                         fsSource.Read(section.Data.Data, 0, 3968);
 
                         //Read section ID into section object
-                        fsSource.Seek(BasePosition + 0x0FF4, SeekOrigin.Begin);
+                        fsSource.Seek(BasePosition + SECTION_SECTIONID, SeekOrigin.Begin);
                         fsSource.Read(section.SectionID, 0, 2);
 
                         //Read section CHECKSUM - IMPORTANT
-                        fsSource.Seek(BasePosition + 0x0FF6, SeekOrigin.Begin);
+                        fsSource.Seek(BasePosition + SECTION_CHECKSUM, SeekOrigin.Begin);
                         fsSource.Read(section.Checksum, 0, 2);
 
                         //Read signature into section object
-                        fsSource.Seek(BasePosition + 0x0FF8, SeekOrigin.Begin);
+                        fsSource.Seek(BasePosition + SECTION_SIGNATURE, SeekOrigin.Begin);
                         fsSource.Read(section.Signature, 0, 4);
 
                         //Read save index into section object
-                        fsSource.Seek(BasePosition + 0x0FFC, SeekOrigin.Begin);
+                        fsSource.Seek(BasePosition + SECTION_SAVEINDEX, SeekOrigin.Begin);
                         fsSource.Read(section.SaveIndex, 0, 4);
 
                         var newChecksum = section.GetChecksumForData(section.Data.Data, Utilities.GetSectionSize(BitConverter.ToUInt16(section.SectionID)));
@@ -353,19 +392,19 @@ namespace GenIIISaveEditor
                         fsSource.Read(section.Data.Data, 0, 3968);
 
                         //Read section ID into section object
-                        fsSource.Seek(BasePosition + 0x0FF4, SeekOrigin.Begin);
+                        fsSource.Seek(BasePosition + SECTION_SECTIONID, SeekOrigin.Begin);
                         fsSource.Read(section.SectionID, 0, 2);
 
                         //Read section CHECKSUM - IMPORTANT
-                        fsSource.Seek(BasePosition + 0x0FF6, SeekOrigin.Begin);
+                        fsSource.Seek(BasePosition + SECTION_CHECKSUM, SeekOrigin.Begin);
                         fsSource.Read(section.Checksum, 0, 2);
 
                         //Read signature into section object
-                        fsSource.Seek(BasePosition + 0x0FF8, SeekOrigin.Begin);
+                        fsSource.Seek(BasePosition + SECTION_SIGNATURE, SeekOrigin.Begin);
                         fsSource.Read(section.Signature, 0, 4);
 
                         //Read save index into section object
-                        fsSource.Seek(BasePosition + 0x0FFC, SeekOrigin.Begin);
+                        fsSource.Seek(BasePosition + SECTION_SAVEINDEX, SeekOrigin.Begin);
                         fsSource.Read(section.SaveIndex, 0, 4);
 
                         var newChecksum = section.GetChecksumForData(section.Data.Data, Utilities.GetSectionSize(BitConverter.ToUInt16(section.SectionID)));
@@ -625,10 +664,6 @@ namespace GenIIISaveEditor
             PokemonTrainerNameBox.Text = Utilities.DecryptMessage(pokemon.OTName);
 
             PokemonNicknameBox.Text = Utilities.DecryptMessage(pokemon.Nickname);
-            ConsoleLog(ELogType.Debug, $"Char: {Utilities.GetDecryptedCharacter(pokemon.Nickname[0])}");
-            ConsoleLog(ELogType.Debug, $"Char: {Utilities.GetDecryptedCharacter(pokemon.Nickname[1])}");
-            ConsoleLog(ELogType.Debug, $"Char: {Utilities.GetDecryptedCharacter(pokemon.Nickname[2])}");
-            ConsoleLog(ELogType.Debug, $"Char: {Utilities.GetDecryptedCharacter(pokemon.Nickname[3])}");
             LevelBox.Text = pokemon.Level[0].ToString();
             CurHpBox.Text = BitConverter.ToUInt16(pokemon.CurrentHP).ToString();
             MaxHpBox.Text = BitConverter.ToUInt16(pokemon.TotalHP).ToString();
