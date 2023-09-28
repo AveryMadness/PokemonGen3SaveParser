@@ -10,6 +10,7 @@ namespace GenIIISaveEditor
         //Object used in code, selected by save index
         SaveFile usedFile = new SaveFile();
 
+
         //Number of save sections
         int NumSections = 14;
 
@@ -129,6 +130,8 @@ namespace GenIIISaveEditor
         private void Form1_Load(object sender, EventArgs e)
         {
             ConsoleLog(ELogType.Info, "Program initialized successfully!");
+            TrainerTab.Enabled = false;
+
         }
 
         private void Form1_OnFormClosing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -147,6 +150,21 @@ namespace GenIIISaveEditor
 
         private void SetupTrainerInfo()
         {
+            TrainerTab.Enabled = true;
+            PokemonCombo.Items.Clear();
+            PokemonCombo.SelectedIndex = -1;
+            trainerGroup.Visible = false;
+            pokemonGroup.Visible = false;
+            statusGroup.Visible = false;
+            TIDLabel.Visible = PokemonTIDBox.Visible = false;
+            SIDLabel.Visible = PokemonSIDBox.Visible = false;
+            PokemonTrainerNameBox.Visible = TrainerNameLabel.Visible = false;
+            NicknameLabel.Visible = PokemonNicknameBox.Visible = false;
+            LevelLabel.Visible = LevelBox.Visible = false;
+            HPLabel.Visible = CurHpBox.Visible = MaxHpBox.Visible = false;
+            sleepChk.Visible = sleepTurnsBox.Visible = sleepTurnsLabel.Visible = false;
+            poisonChk.Visible = paralzChk.Visible = freezeChk.Visible = burnChk.Visible = badpoisonChk.Visible = false;
+
             Section trainerSection = usedFile.GetByID(0);
             Section itemsSection = usedFile.GetByID(1);
 
@@ -274,6 +292,31 @@ namespace GenIIISaveEditor
 
             } */
 
+            var data = new byte[12];
+            var otid = BitConverter.ToUInt32(Pokemons[0].OTID);
+            var personalityValue = BitConverter.ToUInt32(Pokemons[0].PersonalityValue);
+
+            var subsection = Utilities.GetSubstructureOrder(personalityValue);
+            byte[] species = new byte[2];
+
+            using (MemoryStream memStream = new MemoryStream(Pokemons[0].Data))
+            {
+                memStream.Seek(0 * subsection.IndexOf('G'), SeekOrigin.Begin);
+                memStream.Read(data, 0, 12);
+            }
+
+            var decrypted = Utilities.__decryptsubsection(data, otid, personalityValue);
+
+
+            using (MemoryStream memStream = new MemoryStream(decrypted))
+            {
+                memStream.Read(species, 0, 2);
+            }
+
+            UInt16 specis = BitConverter.ToUInt16(species);
+            ConsoleLog(ELogType.Debug, specis.ToString());
+
+
             foreach (PKMFile pokemon in Pokemons)
             {
                 PokemonCombo.Items.Add(Utilities.DecryptMessage(pokemon.Nickname));
@@ -322,6 +365,12 @@ namespace GenIIISaveEditor
             SectionText.Visible = true;
             CheckChecksums.Visible = true;
             toolTip1.SetToolTip(ChecksumErrorImage, "Checksum value invalid");
+
+            sectionLocationOffset.Visible = false;
+
+#if DEBUG
+            sectionLocationLabel.Visible = true;
+#endif
             SetupTrainerInfo();
         }
 
@@ -453,6 +502,10 @@ namespace GenIIISaveEditor
 
         private void button1_Click(object sender, EventArgs e)
         {
+            openFileDialog1.Filter =
+                        "Save Files|*.sav" +
+                        "|All Files|*.*";
+            openFileDialog1.FilterIndex = 1;
             var result = openFileDialog1.ShowDialog();
 
             if (result == DialogResult.OK)
@@ -480,6 +533,12 @@ namespace GenIIISaveEditor
             ChecksumLabel.Visible = true;
             button2.Visible = true;
             button3.Visible = true;
+
+            var location = usedFile.Sections[index].SectionPosition.ToString("X");
+#if DEBUG
+            sectionLocationOffset.Visible = true;
+            sectionLocationOffset.Text = "0x" + location;
+#endif
 
             var newChecksum = usedFile.Sections[index].GetChecksumForData(usedFile.Sections[index].Data.Data, Utilities.GetSectionSize(BitConverter.ToUInt16(usedFile.Sections[index].SectionID)));
             
@@ -657,6 +716,19 @@ namespace GenIIISaveEditor
 
         private void PokemonCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
+
+            trainerGroup.Visible = true;
+            pokemonGroup.Visible = true;
+            statusGroup.Visible = true;
+            TIDLabel.Visible = PokemonTIDBox.Visible = true;
+            SIDLabel.Visible = PokemonSIDBox.Visible = true;
+            PokemonTrainerNameBox.Visible = TrainerNameLabel.Visible = true;
+            NicknameLabel.Visible = PokemonNicknameBox.Visible = true;
+            LevelLabel.Visible = LevelBox.Visible = true;
+            HPLabel.Visible = CurHpBox.Visible = MaxHpBox.Visible = true;
+            sleepChk.Visible = true;
+            poisonChk.Visible = paralzChk.Visible = freezeChk.Visible = burnChk.Visible = badpoisonChk.Visible = true;
+
             PKMFile pokemon = Pokemons[PokemonCombo.SelectedIndex];
             var tid = GetTrainerID(pokemon.OTID);
             PokemonTIDBox.Text = tid.TID.ToString();

@@ -31,21 +31,34 @@ namespace GenIIISaveEditor
             return (data & (1 << bit - 1)) != 0;
         }
 
-        public static void __decryptsubsection(ref byte[] data, UInt32 otID, UInt32 personalityValue)
+        public static byte[] __decryptsubsection(byte[] data, UInt32 otID, UInt32 personalityValue)
         {
-            if (data.Length < 12)
-                return;
+            UInt32 decryptionKey = otID ^ personalityValue;
 
-            var decryptionKey = otID ^ personalityValue;
-            UInt32 intData = BitConverter.ToUInt32(data);
+            byte[] chunk1 = new byte[4];
+            byte[] chunk2 = new byte[4];
+            byte[] chunk3 = new byte[4];
 
-            for (int i = 0; i < 12; i++)
+            using (MemoryStream memStream = new MemoryStream(data))
             {
-                intData ^= otID;
-                intData ^= personalityValue;
+                memStream.Read(chunk1, 0, 4);
+                memStream.Seek(5, SeekOrigin.Begin);
+                memStream.Read(chunk2, 0, 4);
+                memStream.Seek(9, SeekOrigin.Begin);
+                memStream.Read(chunk3, 0, 4);
             }
 
-            data = BitConverter.GetBytes(intData);
+            UInt32 data1 = BitConverter.ToUInt32(chunk1) ^ decryptionKey;
+            UInt32 data2 = BitConverter.ToUInt32(chunk2) ^ decryptionKey;
+            UInt32 data3 = BitConverter.ToUInt32(chunk3) ^ decryptionKey;
+            List<byte> retValue = new List<byte>();
+
+
+            retValue.AddRange(BitConverter.GetBytes(data1));
+            retValue.AddRange(BitConverter.GetBytes(data2));
+            retValue.AddRange(BitConverter.GetBytes(data3));
+
+            return retValue.ToArray();
         }
 
         public static byte[] exlusiveOR(byte[] array, uint key)

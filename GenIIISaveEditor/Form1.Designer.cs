@@ -38,6 +38,8 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.ChecksumControl = new System.Windows.Forms.TabControl();
             this.ChecksumTab = new System.Windows.Forms.TabPage();
+            this.sectionLocationOffset = new System.Windows.Forms.Label();
+            this.sectionLocationLabel = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.ChecksumValue = new System.Windows.Forms.TextBox();
@@ -52,32 +54,34 @@
             this.button1 = new System.Windows.Forms.Button();
             this.TrainerTab = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.statusGroup = new System.Windows.Forms.GroupBox();
+            this.sleepTurnsLabel = new System.Windows.Forms.Label();
+            this.sleepTurnsBox = new System.Windows.Forms.TextBox();
             this.badpoisonChk = new System.Windows.Forms.CheckBox();
             this.paralzChk = new System.Windows.Forms.CheckBox();
             this.freezeChk = new System.Windows.Forms.CheckBox();
             this.burnChk = new System.Windows.Forms.CheckBox();
             this.poisonChk = new System.Windows.Forms.CheckBox();
             this.sleepChk = new System.Windows.Forms.CheckBox();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.pokemonGroup = new System.Windows.Forms.GroupBox();
             this.PokemonNicknameBox = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
+            this.NicknameLabel = new System.Windows.Forms.Label();
             this.MaxHpBox = new System.Windows.Forms.TextBox();
             this.CurHpBox = new System.Windows.Forms.TextBox();
-            this.label16 = new System.Windows.Forms.Label();
+            this.LevelLabel = new System.Windows.Forms.Label();
             this.LevelBox = new System.Windows.Forms.TextBox();
-            this.label17 = new System.Windows.Forms.Label();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.HPLabel = new System.Windows.Forms.Label();
+            this.trainerGroup = new System.Windows.Forms.GroupBox();
             this.PokemonSIDBox = new System.Windows.Forms.TextBox();
             this.PokemonTIDBox = new System.Windows.Forms.TextBox();
             this.PokemonTrainerNameBox = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
+            this.SIDLabel = new System.Windows.Forms.Label();
+            this.TIDLabel = new System.Windows.Forms.Label();
+            this.TrainerNameLabel = new System.Windows.Forms.Label();
             this.PokemonCombo = new System.Windows.Forms.ComboBox();
             this.TeamSize = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
+            this.teamSizeLabel = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.button5 = new System.Windows.Forms.Button();
             this.SecondsBox = new System.Windows.Forms.TextBox();
@@ -100,8 +104,6 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label2 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.sleepTurnsBox = new System.Windows.Forms.TextBox();
-            this.sleepTurnsLabel = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.SaveFileTab.SuspendLayout();
             this.creditsGroup.SuspendLayout();
@@ -112,9 +114,9 @@
             this.groupBox1.SuspendLayout();
             this.TrainerTab.SuspendLayout();
             this.groupBox5.SuspendLayout();
-            this.groupBox8.SuspendLayout();
-            this.groupBox7.SuspendLayout();
-            this.groupBox6.SuspendLayout();
+            this.statusGroup.SuspendLayout();
+            this.pokemonGroup.SuspendLayout();
+            this.trainerGroup.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.SuspendLayout();
@@ -196,6 +198,8 @@
             // 
             // ChecksumTab
             // 
+            this.ChecksumTab.Controls.Add(this.sectionLocationOffset);
+            this.ChecksumTab.Controls.Add(this.sectionLocationLabel);
             this.ChecksumTab.Controls.Add(this.button3);
             this.ChecksumTab.Controls.Add(this.button2);
             this.ChecksumTab.Controls.Add(this.ChecksumValue);
@@ -211,6 +215,26 @@
             this.ChecksumTab.TabIndex = 0;
             this.ChecksumTab.Text = "Checksum";
             this.ChecksumTab.UseVisualStyleBackColor = true;
+            // 
+            // sectionLocationOffset
+            // 
+            this.sectionLocationOffset.AutoSize = true;
+            this.sectionLocationOffset.Location = new System.Drawing.Point(238, 29);
+            this.sectionLocationOffset.Name = "sectionLocationOffset";
+            this.sectionLocationOffset.Size = new System.Drawing.Size(25, 15);
+            this.sectionLocationOffset.TabIndex = 10;
+            this.sectionLocationOffset.Text = "0x0";
+            this.sectionLocationOffset.Visible = false;
+            // 
+            // sectionLocationLabel
+            // 
+            this.sectionLocationLabel.AutoSize = true;
+            this.sectionLocationLabel.Location = new System.Drawing.Point(142, 29);
+            this.sectionLocationLabel.Name = "sectionLocationLabel";
+            this.sectionLocationLabel.Size = new System.Drawing.Size(99, 15);
+            this.sectionLocationLabel.TabIndex = 9;
+            this.sectionLocationLabel.Text = "Location in Save: ";
+            this.sectionLocationLabel.Visible = false;
             // 
             // button3
             // 
@@ -357,12 +381,12 @@
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.groupBox8);
-            this.groupBox5.Controls.Add(this.groupBox7);
-            this.groupBox5.Controls.Add(this.groupBox6);
+            this.groupBox5.Controls.Add(this.statusGroup);
+            this.groupBox5.Controls.Add(this.pokemonGroup);
+            this.groupBox5.Controls.Add(this.trainerGroup);
             this.groupBox5.Controls.Add(this.PokemonCombo);
             this.groupBox5.Controls.Add(this.TeamSize);
-            this.groupBox5.Controls.Add(this.label11);
+            this.groupBox5.Controls.Add(this.teamSizeLabel);
             this.groupBox5.Location = new System.Drawing.Point(343, 0);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(443, 305);
@@ -370,22 +394,39 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Team";
             // 
-            // groupBox8
+            // statusGroup
             // 
-            this.groupBox8.Controls.Add(this.sleepTurnsLabel);
-            this.groupBox8.Controls.Add(this.sleepTurnsBox);
-            this.groupBox8.Controls.Add(this.badpoisonChk);
-            this.groupBox8.Controls.Add(this.paralzChk);
-            this.groupBox8.Controls.Add(this.freezeChk);
-            this.groupBox8.Controls.Add(this.burnChk);
-            this.groupBox8.Controls.Add(this.poisonChk);
-            this.groupBox8.Controls.Add(this.sleepChk);
-            this.groupBox8.Location = new System.Drawing.Point(217, 10);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(200, 267);
-            this.groupBox8.TabIndex = 16;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "Status Condition";
+            this.statusGroup.Controls.Add(this.sleepTurnsLabel);
+            this.statusGroup.Controls.Add(this.sleepTurnsBox);
+            this.statusGroup.Controls.Add(this.badpoisonChk);
+            this.statusGroup.Controls.Add(this.paralzChk);
+            this.statusGroup.Controls.Add(this.freezeChk);
+            this.statusGroup.Controls.Add(this.burnChk);
+            this.statusGroup.Controls.Add(this.poisonChk);
+            this.statusGroup.Controls.Add(this.sleepChk);
+            this.statusGroup.Location = new System.Drawing.Point(217, 10);
+            this.statusGroup.Name = "statusGroup";
+            this.statusGroup.Size = new System.Drawing.Size(200, 267);
+            this.statusGroup.TabIndex = 16;
+            this.statusGroup.TabStop = false;
+            this.statusGroup.Text = "Status Condition";
+            // 
+            // sleepTurnsLabel
+            // 
+            this.sleepTurnsLabel.AutoSize = true;
+            this.sleepTurnsLabel.Location = new System.Drawing.Point(92, 47);
+            this.sleepTurnsLabel.Name = "sleepTurnsLabel";
+            this.sleepTurnsLabel.Size = new System.Drawing.Size(108, 15);
+            this.sleepTurnsLabel.TabIndex = 13;
+            this.sleepTurnsLabel.Text = "Sleep Timer (Turns)";
+            // 
+            // sleepTurnsBox
+            // 
+            this.sleepTurnsBox.Location = new System.Drawing.Point(94, 22);
+            this.sleepTurnsBox.MaxLength = 1;
+            this.sleepTurnsBox.Name = "sleepTurnsBox";
+            this.sleepTurnsBox.Size = new System.Drawing.Size(100, 23);
+            this.sleepTurnsBox.TabIndex = 12;
             // 
             // badpoisonChk
             // 
@@ -448,22 +489,22 @@
             this.sleepChk.Text = "Sleep";
             this.sleepChk.UseVisualStyleBackColor = true;
             // 
-            // groupBox7
+            // pokemonGroup
             // 
-            this.groupBox7.Controls.Add(this.PokemonNicknameBox);
-            this.groupBox7.Controls.Add(this.label18);
-            this.groupBox7.Controls.Add(this.label12);
-            this.groupBox7.Controls.Add(this.MaxHpBox);
-            this.groupBox7.Controls.Add(this.CurHpBox);
-            this.groupBox7.Controls.Add(this.label16);
-            this.groupBox7.Controls.Add(this.LevelBox);
-            this.groupBox7.Controls.Add(this.label17);
-            this.groupBox7.Location = new System.Drawing.Point(6, 164);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(200, 113);
-            this.groupBox7.TabIndex = 15;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Pokemon";
+            this.pokemonGroup.Controls.Add(this.PokemonNicknameBox);
+            this.pokemonGroup.Controls.Add(this.label18);
+            this.pokemonGroup.Controls.Add(this.NicknameLabel);
+            this.pokemonGroup.Controls.Add(this.MaxHpBox);
+            this.pokemonGroup.Controls.Add(this.CurHpBox);
+            this.pokemonGroup.Controls.Add(this.LevelLabel);
+            this.pokemonGroup.Controls.Add(this.LevelBox);
+            this.pokemonGroup.Controls.Add(this.HPLabel);
+            this.pokemonGroup.Location = new System.Drawing.Point(6, 164);
+            this.pokemonGroup.Name = "pokemonGroup";
+            this.pokemonGroup.Size = new System.Drawing.Size(200, 113);
+            this.pokemonGroup.TabIndex = 15;
+            this.pokemonGroup.TabStop = false;
+            this.pokemonGroup.Text = "Pokemon";
             // 
             // PokemonNicknameBox
             // 
@@ -483,14 +524,14 @@
             this.label18.TabIndex = 14;
             this.label18.Text = "/";
             // 
-            // label12
+            // NicknameLabel
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(9, 23);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(67, 15);
-            this.label12.TabIndex = 3;
-            this.label12.Text = "Nickname: ";
+            this.NicknameLabel.AutoSize = true;
+            this.NicknameLabel.Location = new System.Drawing.Point(9, 23);
+            this.NicknameLabel.Name = "NicknameLabel";
+            this.NicknameLabel.Size = new System.Drawing.Size(67, 15);
+            this.NicknameLabel.TabIndex = 3;
+            this.NicknameLabel.Text = "Nickname: ";
             // 
             // MaxHpBox
             // 
@@ -508,14 +549,14 @@
             this.CurHpBox.Size = new System.Drawing.Size(43, 23);
             this.CurHpBox.TabIndex = 12;
             // 
-            // label16
+            // LevelLabel
             // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(9, 50);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(40, 15);
-            this.label16.TabIndex = 9;
-            this.label16.Text = "Level: ";
+            this.LevelLabel.AutoSize = true;
+            this.LevelLabel.Location = new System.Drawing.Point(9, 50);
+            this.LevelLabel.Name = "LevelLabel";
+            this.LevelLabel.Size = new System.Drawing.Size(40, 15);
+            this.LevelLabel.TabIndex = 9;
+            this.LevelLabel.Text = "Level: ";
             // 
             // LevelBox
             // 
@@ -525,29 +566,30 @@
             this.LevelBox.Size = new System.Drawing.Size(43, 23);
             this.LevelBox.TabIndex = 11;
             // 
-            // label17
+            // HPLabel
             // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(9, 77);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(26, 15);
-            this.label17.TabIndex = 10;
-            this.label17.Text = "HP:";
+            this.HPLabel.AutoSize = true;
+            this.HPLabel.Location = new System.Drawing.Point(9, 77);
+            this.HPLabel.Name = "HPLabel";
+            this.HPLabel.Size = new System.Drawing.Size(26, 15);
+            this.HPLabel.TabIndex = 10;
+            this.HPLabel.Text = "HP:";
             // 
-            // groupBox6
+            // trainerGroup
             // 
-            this.groupBox6.Controls.Add(this.PokemonSIDBox);
-            this.groupBox6.Controls.Add(this.PokemonTIDBox);
-            this.groupBox6.Controls.Add(this.PokemonTrainerNameBox);
-            this.groupBox6.Controls.Add(this.label15);
-            this.groupBox6.Controls.Add(this.label13);
-            this.groupBox6.Controls.Add(this.label14);
-            this.groupBox6.Location = new System.Drawing.Point(6, 71);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(183, 94);
-            this.groupBox6.TabIndex = 6;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Trainer";
+            this.trainerGroup.Controls.Add(this.PokemonSIDBox);
+            this.trainerGroup.Controls.Add(this.PokemonTIDBox);
+            this.trainerGroup.Controls.Add(this.PokemonTrainerNameBox);
+            this.trainerGroup.Controls.Add(this.SIDLabel);
+            this.trainerGroup.Controls.Add(this.TIDLabel);
+            this.trainerGroup.Controls.Add(this.TrainerNameLabel);
+            this.trainerGroup.Enabled = false;
+            this.trainerGroup.Location = new System.Drawing.Point(6, 71);
+            this.trainerGroup.Name = "trainerGroup";
+            this.trainerGroup.Size = new System.Drawing.Size(183, 94);
+            this.trainerGroup.TabIndex = 6;
+            this.trainerGroup.TabStop = false;
+            this.trainerGroup.Text = "Trainer";
             // 
             // PokemonSIDBox
             // 
@@ -573,32 +615,32 @@
             this.PokemonTrainerNameBox.Size = new System.Drawing.Size(83, 23);
             this.PokemonTrainerNameBox.TabIndex = 5;
             // 
-            // label15
+            // SIDLabel
             // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(7, 42);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(27, 15);
-            this.label15.TabIndex = 6;
-            this.label15.Text = "SID:";
+            this.SIDLabel.AutoSize = true;
+            this.SIDLabel.Location = new System.Drawing.Point(7, 42);
+            this.SIDLabel.Name = "SIDLabel";
+            this.SIDLabel.Size = new System.Drawing.Size(27, 15);
+            this.SIDLabel.TabIndex = 6;
+            this.SIDLabel.Text = "SID:";
             // 
-            // label13
+            // TIDLabel
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(6, 21);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(27, 15);
-            this.label13.TabIndex = 4;
-            this.label13.Text = "TID:";
+            this.TIDLabel.AutoSize = true;
+            this.TIDLabel.Location = new System.Drawing.Point(6, 21);
+            this.TIDLabel.Name = "TIDLabel";
+            this.TIDLabel.Size = new System.Drawing.Size(27, 15);
+            this.TIDLabel.TabIndex = 4;
+            this.TIDLabel.Text = "TID:";
             // 
-            // label14
+            // TrainerNameLabel
             // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(6, 67);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(80, 15);
-            this.label14.TabIndex = 5;
-            this.label14.Text = "Trainer Name:";
+            this.TrainerNameLabel.AutoSize = true;
+            this.TrainerNameLabel.Location = new System.Drawing.Point(6, 67);
+            this.TrainerNameLabel.Name = "TrainerNameLabel";
+            this.TrainerNameLabel.Size = new System.Drawing.Size(80, 15);
+            this.TrainerNameLabel.TabIndex = 5;
+            this.TrainerNameLabel.Text = "Trainer Name:";
             // 
             // PokemonCombo
             // 
@@ -618,14 +660,14 @@
             this.TeamSize.TabIndex = 1;
             this.TeamSize.Text = "0";
             // 
-            // label11
+            // teamSizeLabel
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 20);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(64, 15);
-            this.label11.TabIndex = 0;
-            this.label11.Text = "Team Size: ";
+            this.teamSizeLabel.AutoSize = true;
+            this.teamSizeLabel.Location = new System.Drawing.Point(6, 20);
+            this.teamSizeLabel.Name = "teamSizeLabel";
+            this.teamSizeLabel.Size = new System.Drawing.Size(64, 15);
+            this.teamSizeLabel.TabIndex = 0;
+            this.teamSizeLabel.Text = "Team Size: ";
             // 
             // groupBox4
             // 
@@ -826,23 +868,6 @@
             this.label2.Text = "Console";
             this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
-            // sleepTurnsBox
-            // 
-            this.sleepTurnsBox.Location = new System.Drawing.Point(94, 22);
-            this.sleepTurnsBox.MaxLength = 1;
-            this.sleepTurnsBox.Name = "sleepTurnsBox";
-            this.sleepTurnsBox.Size = new System.Drawing.Size(100, 23);
-            this.sleepTurnsBox.TabIndex = 12;
-            // 
-            // sleepTurnsLabel
-            // 
-            this.sleepTurnsLabel.AutoSize = true;
-            this.sleepTurnsLabel.Location = new System.Drawing.Point(92, 47);
-            this.sleepTurnsLabel.Name = "sleepTurnsLabel";
-            this.sleepTurnsLabel.Size = new System.Drawing.Size(108, 15);
-            this.sleepTurnsLabel.TabIndex = 13;
-            this.sleepTurnsLabel.Text = "Sleep Timer (Turns)";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -852,6 +877,7 @@
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.richTextBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -872,12 +898,12 @@
             this.TrainerTab.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
-            this.groupBox8.ResumeLayout(false);
-            this.groupBox8.PerformLayout();
-            this.groupBox7.ResumeLayout(false);
-            this.groupBox7.PerformLayout();
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
+            this.statusGroup.ResumeLayout(false);
+            this.statusGroup.PerformLayout();
+            this.pokemonGroup.ResumeLayout(false);
+            this.pokemonGroup.PerformLayout();
+            this.trainerGroup.ResumeLayout(false);
+            this.trainerGroup.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -937,22 +963,22 @@
         private TextBox MaxHpBox;
         private TextBox CurHpBox;
         private TextBox LevelBox;
-        private Label label17;
-        private Label label16;
+        private Label HPLabel;
+        private Label LevelLabel;
         private TextBox PokemonNicknameBox;
-        private GroupBox groupBox6;
+        private GroupBox trainerGroup;
         private TextBox PokemonSIDBox;
         private TextBox PokemonTIDBox;
         private TextBox PokemonTrainerNameBox;
-        private Label label15;
-        private Label label13;
-        private Label label14;
-        private Label label12;
+        private Label SIDLabel;
+        private Label TIDLabel;
+        private Label TrainerNameLabel;
+        private Label NicknameLabel;
         private ComboBox PokemonCombo;
         private Label TeamSize;
-        private Label label11;
-        private GroupBox groupBox7;
-        private GroupBox groupBox8;
+        private Label teamSizeLabel;
+        private GroupBox pokemonGroup;
+        private GroupBox statusGroup;
         private CheckBox badpoisonChk;
         private CheckBox paralzChk;
         private CheckBox freezeChk;
@@ -961,5 +987,7 @@
         private CheckBox sleepChk;
         private Label sleepTurnsLabel;
         private TextBox sleepTurnsBox;
+        private Label sectionLocationOffset;
+        private Label sectionLocationLabel;
     }
 }
