@@ -583,7 +583,6 @@
             this.trainerGroup.Controls.Add(this.SIDLabel);
             this.trainerGroup.Controls.Add(this.TIDLabel);
             this.trainerGroup.Controls.Add(this.TrainerNameLabel);
-            this.trainerGroup.Enabled = false;
             this.trainerGroup.Location = new System.Drawing.Point(6, 71);
             this.trainerGroup.Name = "trainerGroup";
             this.trainerGroup.Size = new System.Drawing.Size(183, 94);
