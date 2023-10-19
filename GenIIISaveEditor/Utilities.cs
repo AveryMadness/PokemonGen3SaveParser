@@ -26,6 +26,97 @@ namespace GenIIISaveEditor
             return (UIntPtr)(array.Length / sizeof(byte));
         }
 
+        public static string GetSetting(IniFile Settings, string key)
+        {
+            return Settings.Read(key, "RecentFiles");    
+        }
+
+        public static bool ValidKey(IniFile Settings, string key)
+        {
+            var ret = Settings.Read(key, "RecentFiles");
+            return ret != "" && ret != " " && ret != null;
+        }
+
+        public static void UpdateRecentFiles(IniFile Settings, string NewPath)
+        {
+            var File1 = Settings.Read("File1", "RecentFiles");
+            var File2 = Settings.Read("File2", "RecentFiles");
+            var File3 = Settings.Read("File3", "RecentFiles");
+            var File4 = Settings.Read("File4", "RecentFiles");
+            string[] existingFiles = new string[4];
+            existingFiles[0] = File1;
+            existingFiles[1] = File2;
+            existingFiles[2] = File3;
+            existingFiles[3] = File4;
+
+            if (existingFiles.Contains(NewPath))
+                return;
+
+            if (ValidKey(Settings, "File4") && File3 != null)
+            {
+                Settings.Write("File4", File3, "RecentFiles");
+            }
+
+            if (ValidKey(Settings, "File3") && File2 != null)
+            {
+                Settings.Write("File3", File2, "RecentFiles");
+            }
+
+            if (ValidKey(Settings, "File2") && File1 != null)
+            {
+                Settings.Write("File2", File1, "RecentFiles");
+            }
+
+            if (!ValidKey(Settings, "File2") && ValidKey(Settings, "File1") && File1 != null)
+            {
+                Settings.Write("File2", File1, "RecentFiles");
+            }
+
+            if (!ValidKey(Settings, "File3") && ValidKey(Settings, "File2") && File2 != null)
+            {
+                Settings.Write("File3", File2, "RecentFiles");
+            }
+
+            if (!ValidKey(Settings, "File4") && ValidKey(Settings, "File3") && File3 != null)
+            {
+                Settings.Write("File4", File3, "RecentFiles");
+            }
+
+            Settings.Write("File1", NewPath, "RecentFiles");
+        }
+
+        public static IniFile GetSettings()
+        {
+            if (!File.Exists("settings.ini"))
+            {
+                File.Create("settings.ini");
+            }
+
+            IniFile ini = new IniFile("settings.ini", FileAccess.ReadWrite);
+
+            if (!ini.KeyExists("File1", "RecentFiles"))
+            {
+                ini.Write("File1", "", "RecentFiles");
+            }
+
+            if (!ini.KeyExists("File2", "RecentFiles"))
+            {
+                ini.Write("File2", "", "RecentFiles");
+            }
+
+            if (!ini.KeyExists("File3", "RecentFiles"))
+            {
+                ini.Write("File3", "", "RecentFiles");
+            }
+
+            if (!ini.KeyExists("File4", "RecentFiles"))
+            {
+                ini.Write("File4", "", "RecentFiles");
+            }
+
+            return ini;
+        }
+
         public static bool ReadNBit(uint data, int bit)
         {
             return (data & (1 << bit - 1)) != 0;
@@ -42,9 +133,7 @@ namespace GenIIISaveEditor
             using (MemoryStream memStream = new MemoryStream(data))
             {
                 memStream.Read(chunk1, 0, 4);
-                memStream.Seek(5, SeekOrigin.Begin);
                 memStream.Read(chunk2, 0, 4);
-                memStream.Seek(9, SeekOrigin.Begin);
                 memStream.Read(chunk3, 0, 4);
             }
 
@@ -440,8 +529,10 @@ namespace GenIIISaveEditor
                     return 0;
             }
         }
-        
-        public static void WriteToSection(string fileName, int SectionOffset, int size, byte[] toWrite, int propertyOffset)
+
+       
+
+        public static void WriteToSection(string fileName, int SectionOffset, int size, byte[] toWrite, long propertyOffset)
         {
             using (FileStream fsSource = new FileStream(fileName, FileMode.Open, FileAccess.ReadWrite))
             using (BinaryWriter binaryWriter = new BinaryWriter(fsSource))
@@ -451,6 +542,16 @@ namespace GenIIISaveEditor
                     fsSource.Seek(propertyOffset, SeekOrigin.Current);
                 fsSource.Write(toWrite, 0, size);
             }
+        }
+
+        public static ushort Add16(ReadOnlySpan<byte> data)
+        {
+            ushort chk = 0;
+            foreach (var u16 in MemoryMarshal.Cast<byte, ushort>(data))
+            {
+                chk += 16;
+            }
+            return chk;
         }
     }
 }

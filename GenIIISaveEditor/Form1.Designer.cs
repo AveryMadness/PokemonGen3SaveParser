@@ -48,10 +48,6 @@
             this.ChecksumLabel = new System.Windows.Forms.Label();
             this.SectionText = new System.Windows.Forms.Label();
             this.ChecksumSections = new System.Windows.Forms.ComboBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             this.TrainerTab = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.statusGroup = new System.Windows.Forms.GroupBox();
@@ -104,6 +100,16 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label2 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.recentSavesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearRecentSavesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.SaveFileTab.SuspendLayout();
             this.creditsGroup.SuspendLayout();
@@ -111,7 +117,6 @@
             this.ChecksumControl.SuspendLayout();
             this.ChecksumTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ChecksumErrorImage)).BeginInit();
-            this.groupBox1.SuspendLayout();
             this.TrainerTab.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.statusGroup.SuspendLayout();
@@ -119,39 +124,40 @@
             this.trainerGroup.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // richTextBox1
             // 
             this.richTextBox1.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.richTextBox1.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.richTextBox1.Location = new System.Drawing.Point(12, 360);
+            this.richTextBox1.Location = new System.Drawing.Point(12, 363);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
             this.richTextBox1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.richTextBox1.Size = new System.Drawing.Size(776, 78);
+            this.richTextBox1.Size = new System.Drawing.Size(776, 75);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
+            this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.SaveFileTab);
             this.tabControl1.Controls.Add(this.TrainerTab);
-            this.tabControl1.Location = new System.Drawing.Point(1, 2);
+            this.tabControl1.Location = new System.Drawing.Point(3, 28);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(797, 336);
+            this.tabControl1.Size = new System.Drawing.Size(797, 314);
             this.tabControl1.TabIndex = 2;
             // 
             // SaveFileTab
             // 
             this.SaveFileTab.Controls.Add(this.creditsGroup);
             this.SaveFileTab.Controls.Add(this.groupBox2);
-            this.SaveFileTab.Controls.Add(this.groupBox1);
             this.SaveFileTab.Location = new System.Drawing.Point(4, 24);
             this.SaveFileTab.Name = "SaveFileTab";
             this.SaveFileTab.Padding = new System.Windows.Forms.Padding(3);
-            this.SaveFileTab.Size = new System.Drawing.Size(789, 308);
+            this.SaveFileTab.Size = new System.Drawing.Size(789, 286);
             this.SaveFileTab.TabIndex = 1;
             this.SaveFileTab.Text = "Save File";
             this.SaveFileTab.UseVisualStyleBackColor = true;
@@ -159,7 +165,7 @@
             // creditsGroup
             // 
             this.creditsGroup.Controls.Add(this.creditsLabel);
-            this.creditsGroup.Location = new System.Drawing.Point(13, 131);
+            this.creditsGroup.Location = new System.Drawing.Point(526, 49);
             this.creditsGroup.Name = "creditsGroup";
             this.creditsGroup.Size = new System.Drawing.Size(200, 150);
             this.creditsGroup.TabIndex = 2;
@@ -181,7 +187,7 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.ChecksumControl);
-            this.groupBox2.Location = new System.Drawing.Point(255, 6);
+            this.groupBox2.Location = new System.Drawing.Point(6, 3);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(514, 235);
             this.groupBox2.TabIndex = 1;
@@ -322,51 +328,6 @@
             this.ChecksumSections.Visible = false;
             this.ChecksumSections.SelectedIndexChanged += new System.EventHandler(this.ChecksumSections_SelectedIndexChanged);
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.button1);
-            this.groupBox1.Location = new System.Drawing.Point(7, 6);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(200, 100);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Save File";
-            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter_1);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(68, 19);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(60, 15);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "File Name";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(6, 46);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(42, 19);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "None";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label1.Visible = false;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(71, 71);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(49, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Load";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // TrainerTab
             // 
             this.TrainerTab.Controls.Add(this.groupBox5);
@@ -375,7 +336,7 @@
             this.TrainerTab.Location = new System.Drawing.Point(4, 24);
             this.TrainerTab.Name = "TrainerTab";
             this.TrainerTab.Padding = new System.Windows.Forms.Padding(3);
-            this.TrainerTab.Size = new System.Drawing.Size(789, 308);
+            this.TrainerTab.Size = new System.Drawing.Size(789, 286);
             this.TrainerTab.TabIndex = 2;
             this.TrainerTab.Text = "Trainer";
             this.TrainerTab.UseVisualStyleBackColor = true;
@@ -861,18 +822,103 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 342);
+            this.label2.Location = new System.Drawing.Point(12, 345);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(50, 15);
             this.label2.TabIndex = 3;
             this.label2.Text = "Console";
             this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripDropDownButton1});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(800, 25);
+            this.toolStrip1.TabIndex = 4;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripDropDownButton1
+            // 
+            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openToolStripMenuItem,
+            this.recentSavesToolStripMenuItem,
+            this.saveToolStripMenuItem});
+            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
+            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(38, 22);
+            this.toolStripDropDownButton1.Text = "File";
+            // 
+            // openToolStripMenuItem
+            // 
+            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openToolStripMenuItem.Text = "Open";
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            // 
+            // recentSavesToolStripMenuItem
+            // 
+            this.recentSavesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem2,
+            this.toolStripMenuItem3,
+            this.toolStripMenuItem4,
+            this.toolStripMenuItem5,
+            this.clearRecentSavesToolStripMenuItem});
+            this.recentSavesToolStripMenuItem.Name = "recentSavesToolStripMenuItem";
+            this.recentSavesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.recentSavesToolStripMenuItem.Text = "Recent Saves";
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(172, 22);
+            this.toolStripMenuItem2.Text = "1.";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(172, 22);
+            this.toolStripMenuItem3.Text = "2. ";
+            this.toolStripMenuItem3.Click += new System.EventHandler(this.toolStripMenuItem3_Click);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(172, 22);
+            this.toolStripMenuItem4.Text = "3. ";
+            this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItem4_Click);
+            // 
+            // toolStripMenuItem5
+            // 
+            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(172, 22);
+            this.toolStripMenuItem5.Text = "4. ";
+            this.toolStripMenuItem5.Click += new System.EventHandler(this.toolStripMenuItem5_Click);
+            // 
+            // clearRecentSavesToolStripMenuItem
+            // 
+            this.clearRecentSavesToolStripMenuItem.Name = "clearRecentSavesToolStripMenuItem";
+            this.clearRecentSavesToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.clearRecentSavesToolStripMenuItem.Text = "Clear Recent Saves";
+            this.clearRecentSavesToolStripMenuItem.Click += new System.EventHandler(this.clearRecentSavesToolStripMenuItem_Click);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.richTextBox1);
@@ -893,8 +939,6 @@
             this.ChecksumTab.ResumeLayout(false);
             this.ChecksumTab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ChecksumErrorImage)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.TrainerTab.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
@@ -908,6 +952,8 @@
             this.groupBox4.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -918,16 +964,12 @@
         private RichTextBox richTextBox1;
         private TabControl tabControl1;
         private TabPage SaveFileTab;
-        private GroupBox groupBox1;
-        private Label label1;
-        private Button button1;
         private OpenFileDialog openFileDialog1;
         private TabPage TrainerTab;
         private GroupBox groupBox2;
         private Label label2;
         private TabControl ChecksumControl;
         private TabPage ChecksumTab;
-        private Label label3;
         private Label SectionText;
         private ComboBox ChecksumSections;
         private Label ChecksumLabel;
@@ -989,5 +1031,16 @@
         private TextBox sleepTurnsBox;
         private Label sectionLocationOffset;
         private Label sectionLocationLabel;
+        private ToolStrip toolStrip1;
+        private ToolStripDropDownButton toolStripDropDownButton1;
+        private ToolStripMenuItem recentSavesToolStripMenuItem;
+        private ToolStripMenuItem testToolStripMenuItem;
+        private ToolStripMenuItem toolStripMenuItem2;
+        private ToolStripMenuItem toolStripMenuItem3;
+        private ToolStripMenuItem toolStripMenuItem4;
+        private ToolStripMenuItem toolStripMenuItem5;
+        private ToolStripMenuItem openToolStripMenuItem;
+        private ToolStripMenuItem clearRecentSavesToolStripMenuItem;
+        private ToolStripMenuItem saveToolStripMenuItem;
     }
 }

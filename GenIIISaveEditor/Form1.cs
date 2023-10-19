@@ -59,6 +59,8 @@ namespace GenIIISaveEditor
         public static long POKEMON_CURRENTHP = 0x56;
         public static long POKEMON_TOTALHP = 0x58;
 
+        public static string FileName = "";
+
         public Form1()
         {
             InitializeComponent();
@@ -131,7 +133,29 @@ namespace GenIIISaveEditor
         {
             ConsoleLog(ELogType.Info, "Program initialized successfully!");
             TrainerTab.Enabled = false;
+            var settings = Utilities.GetSettings();
 
+            for (int i = 0; i < 4; i++)
+            {
+                var setting = settings.Read($"File{i + 1}", "RecentFiles");
+                ConsoleLog(ELogType.Debug, $"Got Setting {setting} for key File{i+1}");
+
+                switch (i)
+                {
+                    case 0:
+                        toolStripMenuItem2.Text = "1. " + setting;
+                        break;
+                    case 1:
+                        toolStripMenuItem3.Text = "2. " + setting;
+                        break;
+                    case 2:
+                        toolStripMenuItem4.Text = "3. " + setting;
+                        break;
+                    case 3:
+                        toolStripMenuItem5.Text = "4. " + setting;
+                        break;
+                }
+            }
         }
 
         private void Form1_OnFormClosing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -347,6 +371,7 @@ namespace GenIIISaveEditor
         private void OnFileSystemInitialized(SaveFile fileToUse)
         {
             ChecksumSections.Items.Clear();
+            PokemonCombo.Items.Clear();
             ChecksumSections.SelectedIndex = -1;
             ChecksumSections.Text = "";
             SectionText.Visible = false;
@@ -376,19 +401,47 @@ namespace GenIIISaveEditor
 
         private void InitializeFileSystem(string fileName)
         {
+            FileName = fileName;
             Array.Clear(fileA.Sections);
             Array.Clear(fileB.Sections);
+            Pokemons.Clear();
+            PokemonCombo.Items.Clear();
             ConsoleLog(ELogType.Info, $"Initializing FileSystem for file {openFileDialog1.SafeFileName}");
             try
             {
+                Utilities.UpdateRecentFiles(Utilities.GetSettings(), fileName);
+
+                var settings = Utilities.GetSettings();
+
+                for (int i = 0; i < 4; i++)
+                {
+                    var setting = settings.Read($"File{i + 1}", "RecentFiles");
+                    ConsoleLog(ELogType.Debug, $"Got Setting {setting} for key File{i + 1}");
+
+                    switch (i)
+                    {
+                        case 0:
+                            toolStripMenuItem2.Text = "1. " + setting;
+                            break;
+                        case 1:
+                            toolStripMenuItem3.Text = "2. " + setting;
+                            break;
+                        case 2:
+                            toolStripMenuItem4.Text = "3. " + setting;
+                            break;
+                        case 3:
+                            toolStripMenuItem5.Text = "4. " + setting;
+                            break;
+                    }
+                }
+
                 //Initialize FileStream with save file as source, Open file and Read contents
-                using (FileStream fsSource = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+                using (FileStream fsSource = new FileStream(FileName, FileMode.Open, FileAccess.Read))
                 using (BinaryReader binaryReader = new BinaryReader(fsSource)) //Initialize BinaryReader with fsSource as Stream
                 {
                     ConsoleLog(ELogType.Info, "Initialized FileSystem successfully.");
                     //Set SaveFile label to file name
-                    label1.Text = "" + openFileDialog1.SafeFileName;
-                    label1.Visible = true;
+                    
 
                     for (int i = 0; i < NumSections; i++)
                     {
@@ -623,7 +676,7 @@ namespace GenIIISaveEditor
 
             if (UInt16.TryParse(ChecksumValue.Text, out newChecksum))
             {
-                Utilities.WriteToSection(openFileDialog1.FileName, location, 2, BitConverter.GetBytes(newChecksum), 0x0FF6);
+                Utilities.WriteToSection(FileName, location, 2, BitConverter.GetBytes(newChecksum), SECTION_CHECKSUM);
                 usedFile.Sections[index].Checksum = BitConverter.GetBytes(newChecksum);
                 ConsoleLog(ELogType.Info, "Wrote Checksum successfully!");
             }
@@ -644,6 +697,103 @@ namespace GenIIISaveEditor
         {
 
         }
+
+        private long GetPkmnOffset(int PokemonIndex)
+        {
+            switch (PokemonIndex)
+            {
+                case 0:
+                    return TEAMPKMN_1;
+                    break;
+                case 1:
+                    return TEAMPKMN_2;
+                    break;
+                case 2:
+                    return TEAMPKMN_3;
+                    break;
+                case 3:
+                    return TEAMPKMN_4;
+                    break;
+                case 4:
+                    return TEAMPKMN_5;
+                    break;
+                case 5:
+                    return TEAMPKMN_6;
+                    break;
+            }
+
+            return TEAMPKMN_1;
+        }
+
+        private byte[] GetRawPokemonData(int Index)
+        {
+            byte[] retVal = new byte[100]; 
+            var section = usedFile.GetByID(1);
+            using (MemoryStream memStream = new MemoryStream(section.Data.Data))
+            {
+                ConsoleLog(ELogType.Debug, (0x0038 + 100 * Index).ToString());
+                memStream.Seek(0x0038 + (100 * Index), SeekOrigin.Begin);
+                memStream.Read(retVal, 0, 100);
+            }
+
+            return retVal;
+        }
+
+        private void WriteToPkmnEasy(int size, byte[] data, long propertyIndex)
+        {
+            Utilities.WriteToSection(FileName, usedFile.GetByID(1).SectionPosition, size, data, GetPkmnOffset(PokemonCombo.SelectedIndex) + propertyIndex);
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                byte[] nameToWrite = Utilities.EncryptString(PlayerNameBox.Text, 7);
+                Utilities.WriteToSection(FileName, usedFile.GetByID(0).SectionPosition, 7, nameToWrite, 0x0000);
+                byte genderValue;
+                Utilities.ParseHex("0x" + GenderBox.SelectedIndex.ToString(), out genderValue);
+                Utilities.WriteToSection(FileName, usedFile.GetByID(0).SectionPosition, 1, new byte[1] { genderValue }, 0x0008);
+
+                UInt32 boxValue;
+                if (UInt32.TryParse(MoneyBox.Text, out boxValue))
+                {
+                    boxValue = BitConverter.ToUInt32(TrainerInfo.SecurityKey) ^ boxValue;
+                    Utilities.WriteToSection(FileName, usedFile.GetByID(1).SectionPosition, 4, BitConverter.GetBytes(boxValue), 0x0290);
+                }
+                else
+                {
+                    ConsoleLog(ELogType.Error, "Invalid money value.");
+                }
+
+                PlayTime newPlaytime = new PlayTime();
+                PlayTime oldPlaytime = Utilities.GetPlayTime(TrainerInfo.TimePlayed);
+
+                UInt16.TryParse(HoursBox.Text, out newPlaytime.Hours);
+                sbyte.TryParse(MinutesBox.Text, out newPlaytime.Minutes);
+                sbyte.TryParse(SecondsBox.Text, out newPlaytime.Seconds);
+                newPlaytime.Frames = oldPlaytime.Frames;
+
+                byte[] toWrite = Utilities.EncryptPlaytime(newPlaytime);
+                Utilities.WriteToSection(FileName, usedFile.GetByID(0).SectionPosition, 5, toWrite, 0x000E);
+                ConsoleLog(ELogType.Info, "Wrote playtime successfully!");
+                Utilities.WriteToSection(FileName, usedFile.GetByID(1).SectionPosition, 10, Utilities.EncryptString(PokemonNicknameBox.Text, 10), GetPkmnOffset(PokemonCombo.SelectedIndex) + 8);
+                Utilities.WriteToSection(FileName, usedFile.GetByID(1).SectionPosition, 7, Utilities.EncryptString(PokemonTrainerNameBox.Text, 7), GetPkmnOffset(PokemonCombo.SelectedIndex) + 20);
+                Utilities.WriteToSection(FileName, usedFile.GetByID(1).SectionPosition, 1, new byte[1] { byte.Parse(LevelBox.Text) }, GetPkmnOffset(PokemonCombo.SelectedIndex) + 84);
+                WriteToPkmnEasy(2, BitConverter.GetBytes(UInt16.Parse(CurHpBox.Text)), 86);
+                WriteToPkmnEasy(2, BitConverter.GetBytes(UInt16.Parse(MaxHpBox.Text)), 88);
+                int originalLocation = PokemonCombo.SelectedIndex;
+                InitializeFileSystem(FileName);
+
+
+                Utilities.WriteToSection(FileName, usedFile.GetByID(1).SectionPosition, 2, BitConverter.GetBytes(Utilities.Add16(GetRawPokemonData(originalLocation))), GetPkmnOffset(originalLocation) + 28);
+
+            }
+            catch (Exception Exception)
+            {
+                ConsoleLog(ELogType.Error, "An error has occurred: " + Exception.ToString());
+            }
+        }
+
 
         private void button4_Click(object sender, EventArgs e)
         {
@@ -765,6 +915,112 @@ namespace GenIIISaveEditor
         {
 
         }
+
+        private void toolStripLabel1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //save 1
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var path = toolStripMenuItem2.Text.Split("1. ")[1];
+                if (path == " " || path == "")
+                    return;
+                InitializeFileSystem(path);
+            }
+            catch (Exception exce)
+            {
+                Console.WriteLine(exce);
+            }
+        }
+
+        //save 2
+        private void toolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var path = toolStripMenuItem3.Text.Split("2. ")[1];
+                if (path == " " || path == "")
+                    return;
+                InitializeFileSystem(path);
+            }
+            catch (Exception exce)
+            {
+                Console.WriteLine(exce);
+            }
+        }
+
+        //save 3
+        private void toolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var path = toolStripMenuItem4.Text.Split("3. ")[1];
+                if (path == " " || path == "")
+                    return;
+                InitializeFileSystem(path);
+            }
+            catch (Exception exce)
+            {
+                Console.WriteLine(exce);
+            }
+        }
+
+        //save 4
+        private void toolStripMenuItem5_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var path = toolStripMenuItem5.Text.Split("4. ")[1];
+                if (path == " " || path == "")
+                    return;
+                InitializeFileSystem(path);
+            }
+            catch (Exception exce)
+            {
+                Console.WriteLine(exce);
+            }
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            button1_Click(sender, e);
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void clearRecentSavesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var settings = Utilities.GetSettings();
+            for (int i = 0; i < 4; i++)
+            {
+                settings.Write($"File{i + 1}", "", "RecentFiles");
+
+                switch (i)
+                {
+                    case 0:
+                        toolStripMenuItem2.Text = "1. ";
+                        break;
+                    case 1:
+                        toolStripMenuItem3.Text = "2. ";
+                        break;
+                    case 2:
+                        toolStripMenuItem4.Text = "3. ";
+                        break;
+                    case 3:
+                        toolStripMenuItem5.Text = "4. ";
+                        break;
+                }
+            }
+        }
+
+       
     }
 
     public static class RichTextBoxExtensions

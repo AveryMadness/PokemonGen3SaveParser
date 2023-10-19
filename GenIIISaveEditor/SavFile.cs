@@ -17,6 +17,12 @@ namespace GenIIISaveEditor
             TID = 0;
             SID = 0;
         }
+
+        public UInt32 EncryptOTID()
+        {
+            UInt32 idFull = SID ^ TID;
+            return idFull >> 3;
+        }
     }
 
     
